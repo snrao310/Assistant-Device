@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "assistant-box-1523119928653",
+  "private_key_id": "d4918521f4a7136439233e3ba604026660f090b0",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCuxMNDDL0x4YqA\nB5Mk+miF4+nAEaxTTjATzxUNX/mktoqXQV3n4OUmK0m2lPcx04DBQCzYC/SImnoo\nrgafb0Ez6Vi3Kjb6wdQwBmYXjZHQ0hlgOUtWC5Btft1uq3EXngKHdLip7+0rDYfq\n8xX4fpYVIJI3MobqUrYoWPpo5Yzn+JhAJpqozVR0mdQ8Q5hHE5hoZUF5nDMJnI0T\nO8KwIH6Bvc3ui1zTyhmqxuNWVibyY6YdKIXbkhMDxL4E6hJeO27Jr9OC6z456NYh\nV+q329Wgi1s+GUwb5vicHhBIsuBS3s+7nRozOUijOmivKZ0dG3HQAMzY+jH3OO7n\n0KM/Uq97AgMBAAECggEABdXAWuWD6iI2PjZ5Yx7ilg+CTgiNl9a3hBCmrzbY4tJx\nGfj8p/9RAGYqBKjlADOoMHlErymdTmFoPti8lExGiqpeSIocxs5XKjArXEiqO7c7\ndl+ewhMu6J6uW4Gf+ccZQc3Knfy4M3b+HVw/5y4WxbCFDuwCAv3Iq9wK7600Clt0\nGtQlYDX5qeQhDf8tcSGwgFxu5f4Mp6Yx03fD4Rf48CVnCZ6U57Z5I5d4cVS+m6uK\nfYk23ssqp6+DjNCuUmMM/nAMZ7WCKRyKpm13Ret09rR9u4buTQiX9euHfsu6F8wW\nxE9NJ5haaron/ZQXfr5FpZdwVzlFYllNq9kVP9QbgQKBgQDw65sa6OmYnzx8pG5X\nNBUaH7dsfngClXA7cAoRnRDCN+JgCbKLvXXL0NgHdJxOOgQD5uQR0Sznjrq+DolI\nJ+wpDozSghjwxWdK/0w/yKXGI5aiFvk1RJSuWylZoqW0njTKCTd7zmv8QWPcwaMD\nn1o4E582w40dxyTyDX6tC9/v+wKBgQC5tSwyafavdKXyHbOkIqXrKU5ffYRE6d+/\nIOxBKmlcUc585GX/Pe4/wPl+TFbhuOqCGo6EAGVZ7DTzzEPkXrbFZNZfNOVODzqc\nsdS2sp7/DDNB9G3r36HduEL6c+Zw0LbK6KrtcCIUJ71xF1ODUpwZkaq57tQof31K\nuw9v3TqmgQKBgQDDMYDHerHYcBtnuSmVCaOXON85zfWZ0k3OOmZOAv2S/ggxW2oH\nggcwjRKaZ8ZEMwkRyD48mUdSjPeMCOb9SSsz0JAT9kgSuz2HK/UxMHXvZOIkjYx3\ntgrogP+tmfO7tPp8Pp9vdb1T8f7g2xoiUzebe3phumpZGAI9AuYBej+DhQKBgEJT\nqfBrlja+U9KwtwuFcHsYKqzCWK6AVXCfIqJ3sl/NvBExRhiultxgYPux6kn+UIud\nTo9o0MoYKiV1LD5xcZf41vP0IX4KxGVYwl9qVo1DXz9MPMJFAjv9ZrarFH/wm4jH\nJt1c8l7+fpPYv/QkWiprs21rFo1MU4SQYQgUHLGBAoGAZCjJmlldSAy6FCq672fB\nywxjXXM9t7cbvccjaThV8k0wZco57ByPnBB8dVXFElBDPqoLELue6O5UvUjWXm45\nNsG+7CKTr/N9r08Bege8NLA1XhaZIYrIdx2dqiu5iIixNa0EYINBjmk65ychLhuB\n7jVuR32M9Kxwj8rP+ZOa0Mk=\n-----END PRIVATE KEY-----\n",
+  "client_email": "starting-account-evg2t2fytvi@assistant-box-1523119928653.iam.gserviceaccount.com",
+  "client_id": "104042027100392120780",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/starting-account-evg2t2fytvi%40assistant-box-1523119928653.iam.gserviceaccount.com"
+}
