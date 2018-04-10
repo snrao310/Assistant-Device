@@ -1,3 +1,4 @@
+
 const record = require('node-record-lpcm16');
 
 // Imports the Google Cloud client library
@@ -22,6 +23,13 @@ const request = {
     interimResults: false, // If you want interim results, set this to true
 };
 
+const io = require('socket.io-client');
+var socket = io.connect('http://localhost:3000');
+
+socket.on('received', function (data) {
+    console.log(data);
+});
+
 // Create a recognize stream
 const recognizeStream = client
     .streamingRecognize(request)
@@ -41,14 +49,15 @@ const recognizeStream = client
                 },
                 json:true
             };
-            request(options, (error, response, body) => {
-
-                if (error) {
-                    throw new Error(error);
-                }
-
-                console.log(response.body);
-            });
+            // request(options, (error, response, body) => {
+            //
+            //     if (error) {
+            //         throw new Error(error);
+            //     }
+            //
+            //     console.log(response.body);
+            // });
+            socket.emit('sendingData',options);
         }
         process.stdout.write(
             data.results[0] && data.results[0].alternatives[0]
