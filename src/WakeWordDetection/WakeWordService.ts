@@ -1,3 +1,5 @@
+import {CloudSpeechDetector} from "../SpeechDetection/CloudSpeechDetector";
+
 const record = require('node-record-lpcm16');
 const Detector = require('snowboy').Detector;
 const Models = require('snowboy').Models;
@@ -63,7 +65,7 @@ export class WakeWordService {
             // console.log(buffer);
             console.log('hotword detected', index, hotword);
             record.stop();
-            // CloudSpeechDetector.start();
+            CloudSpeechDetector.start();
         });
     }
 }
