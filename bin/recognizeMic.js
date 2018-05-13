@@ -25,9 +25,13 @@ const request = {
 
 const io = require('socket.io-client');
 var socket = io.connect('http://localhost:3000');
+socket.on('pop', function (data) {
+    console.log(data);
+});
 
 socket.on('received', function (data) {
-    console.log(data);
+    console.log("AWESOME");
+    socket.disconnect();
 });
 
 // Create a recognize stream
@@ -57,6 +61,7 @@ const recognizeStream = client
             //
             //     console.log(response.body);
             // });
+            // socket.connect('http://localhost:3000');
             socket.emit('sendingData',options);
         }
         process.stdout.write(
