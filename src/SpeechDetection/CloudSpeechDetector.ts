@@ -12,24 +12,24 @@ export class CloudSpeechDetector {
 
     public static socket: any = CloudSpeechDetector.createSocket();
 
-    public static start(){
+    public static start() {
         const request = {
             config: {
                 encoding: encoding,
                 sampleRateHertz: sampleRateHertz,
                 languageCode: languageCode,
+                single_utterance: false
             },
             interimResults: false, // If you want interim results, set this to true
         };
 
         const recognizeStream = this.createRecognizeStream(request);
-
         // Start recording and send the microphone input to the Speech API
         this.startRecording(recognizeStream);
     }
 
 
-    private static createSocket(){
+    private static createSocket() {
         const io = require('socket.io-client');
         var socket = io.connect('http://localhost:3000');
         socket.on('pop', function (data) {
@@ -45,12 +45,15 @@ export class CloudSpeechDetector {
 
 
     //sends received text from google to server
-    private static createRecognizeStream(request){
+    private static createRecognizeStream(request) {
         const recognizeStream = client
             .streamingRecognize(request)
-            .on('error', console.error)
+            .on('error', function () {
+                console.log('ended');
+                CloudSpeechDetector.start();
+            })
             .on('data', data => {
-                    if(data.results[0] && data.results[0].alternatives[0]){
+                    if (data.results[0] && data.results[0].alternatives[0]) {
                         var request = require('request');
                         const options = {
                             method: "POST",
@@ -59,9 +62,9 @@ export class CloudSpeechDetector {
                                 speech: data.results[0].alternatives[0].transcript,
                                 key: 'Hanuman',
                             },
-                            json:true
+                            json: true
                         };
-                        this.socket.emit('sendingData',options);
+                        this.socket.emit('sendingData', options);
 
                     }
                     process.stdout.write(
@@ -74,7 +77,7 @@ export class CloudSpeechDetector {
         return recognizeStream;
     }
 
-    private static startRecording(recognizeStream){
+    private static startRecording(recognizeStream) {
         record
             .start({
                 sampleRateHertz: sampleRateHertz,
@@ -82,7 +85,7 @@ export class CloudSpeechDetector {
                 // Other options, see https://www.npmjs.com/package/node-record-lpcm16#options
                 verbose: false,
                 recordProgram: 'rec', // Try also "arecord" or "sox"
-                silence: '1.0',
+                silence: '10.0',
             })
             .on('error', console.error)
             .pipe(recognizeStream);
