@@ -7,10 +7,16 @@ const client = new speech.SpeechClient();
 const encoding = 'LINEAR16'; //'Encoding of the audio file, e.g. LINEAR16';
 const sampleRateHertz = 16000;
 const languageCode = 'en-US'; //'BCP-47 language code, e.g. en-US';
+let lastUpdatedTime: any;
 
 export class CloudSpeechDetector {
 
     public static socket: any = CloudSpeechDetector.createSocket();
+
+    public static stop(){
+        console.log("stopping recording");
+        record.stop();
+    }
 
     public static start() {
         const request = {
@@ -29,10 +35,9 @@ export class CloudSpeechDetector {
         console.log("Started Cloud Speech Detection");
     }
 
-
     private static createSocket() {
         const io = require('socket.io-client');
-        var socket = io.connect('http://localhost:3000');
+        let socket = io.connect('http://localhost:3000');
         socket.on('pop', function (data) {
             console.log(data);
         });
@@ -44,6 +49,9 @@ export class CloudSpeechDetector {
         return socket;
     }
 
+    public static async sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     //sends received text from google to server
     private static createRecognizeStream(request) {
@@ -71,9 +79,18 @@ export class CloudSpeechDetector {
                         data.results[0] && data.results[0].alternatives[0]
                             ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
                             : `\n\nReached transcription time limit\n`
-                    )
-                record.stop();
-                CloudSpeechDetector.start();
+                    );
+                    record.stop();
+                    CloudSpeechDetector.start();
+                    lastUpdatedTime = new Date();
+                    CloudSpeechDetector.sleep(10000)
+                        .then(()=>{
+                            let now : any= new Date();
+                            if(now - lastUpdatedTime >= 10000){
+                                console.log('we are done');
+                                record.stop();
+                            }
+                        });
                 }
             );
         return recognizeStream;

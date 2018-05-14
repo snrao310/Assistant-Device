@@ -13,9 +13,6 @@ const MODELPATH : string = 'snowboyResources/models/jarvis.umdl';
 
 export class WakeWordService {
 
-    public static detector: any;
-
-
     public static start(){
         models.add(
             {
@@ -40,7 +37,6 @@ export class WakeWordService {
 
         mic.pipe(detector);
     }
-
 
     private static initializeEvents(detector){
         detector.on('silence', function () {
