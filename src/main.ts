@@ -1,5 +1,5 @@
 import {WakeWordService} from "./WakeWordDetection/WakeWordService";
 
-console.log('Device starting');
+console.log('Device Started');
 
 WakeWordService.start();
