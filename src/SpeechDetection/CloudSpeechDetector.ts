@@ -18,7 +18,7 @@ export class CloudSpeechDetector {
                 encoding: encoding,
                 sampleRateHertz: sampleRateHertz,
                 languageCode: languageCode,
-                single_utterance: false
+                single_utterance: true
             },
             interimResults: false, // If you want interim results, set this to true
         };
@@ -55,7 +55,6 @@ export class CloudSpeechDetector {
             })
             .on('data', data => {
                     if (data.results[0] && data.results[0].alternatives[0]) {
-                        var request = require('request');
                         const options = {
                             method: "POST",
                             url: "http://localhost:3000",
@@ -73,6 +72,8 @@ export class CloudSpeechDetector {
                             ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
                             : `\n\nReached transcription time limit\n`
                     )
+                record.stop();
+                CloudSpeechDetector.start();
                 }
             );
         return recognizeStream;
