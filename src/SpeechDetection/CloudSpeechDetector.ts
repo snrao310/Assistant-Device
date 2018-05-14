@@ -26,6 +26,7 @@ export class CloudSpeechDetector {
         const recognizeStream = this.createRecognizeStream(request);
         // Start recording and send the microphone input to the Speech API
         this.startRecording(recognizeStream);
+        console.log("Started Cloud Speech Detection");
     }
 
 

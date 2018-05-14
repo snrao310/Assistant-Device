@@ -63,7 +63,7 @@ export class WakeWordService {
             // together with the <buffer> in the "sound" event if you want to get audio
             // data after the hotword.
             // console.log(buffer);
-            console.log('hotword detected', index, hotword);
+            console.log('Hotword detected', index, hotword);
             record.stop();
             CloudSpeechDetector.start();
         });
