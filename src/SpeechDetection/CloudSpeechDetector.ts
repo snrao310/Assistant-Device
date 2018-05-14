@@ -49,7 +49,7 @@ export class CloudSpeechDetector {
         const recognizeStream = client
             .streamingRecognize(request)
             .on('error', function () {
-                console.log('ended');
+                console.log('Restarting');
                 CloudSpeechDetector.start();
             })
             .on('data', data => {
@@ -70,7 +70,7 @@ export class CloudSpeechDetector {
                     process.stdout.write(
                         data.results[0] && data.results[0].alternatives[0]
                             ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
-                            : `\n\nReached transcription time limit, press Ctrl+C\n`
+                            : `\n\nReached transcription time limit\n`
                     )
                 }
             );
@@ -89,8 +89,6 @@ export class CloudSpeechDetector {
             })
             .on('error', console.error)
             .pipe(recognizeStream);
-
-        console.log('Listening, press Ctrl+C to stop.');
     }
 
 }
