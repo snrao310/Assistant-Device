@@ -1,3 +1,5 @@
+import {ServerConnection} from "../Connections/ServerConnection";
+
 const record = require('node-record-lpcm16');
 // Imports the Google Cloud client library
 const speech = require('@google-cloud/speech');
@@ -10,8 +12,6 @@ const languageCode = 'en-US'; //'BCP-47 language code, e.g. en-US';
 let lastUpdatedTime: any;
 
 export class CloudSpeechDetector {
-
-    public static socket: any = CloudSpeechDetector.createSocket();
 
     public static stop(){
         console.log("stopping recording");
@@ -35,20 +35,6 @@ export class CloudSpeechDetector {
         console.log("Started Cloud Speech Detection");
     }
 
-    private static createSocket() {
-        const io = require('socket.io-client');
-        let socket = io.connect('http://localhost:3000');
-        socket.on('pop', function (data) {
-            console.log(data);
-        });
-
-        socket.on('received', function (data) {
-            console.log("AWESOME");
-            socket.disconnect();
-        });
-        return socket;
-    }
-
     public static async sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -62,19 +48,7 @@ export class CloudSpeechDetector {
                 CloudSpeechDetector.start();
             })
             .on('data', data => {
-                    if (data.results[0] && data.results[0].alternatives[0]) {
-                        const options = {
-                            method: "POST",
-                            url: "http://localhost:3000",
-                            body: {
-                                speech: data.results[0].alternatives[0].transcript,
-                                key: 'Hanuman',
-                            },
-                            json: true
-                        };
-                        this.socket.emit('sendingData', options);
-
-                    }
+                    ServerConnection.sendMessage(data.results[0] && data.results[0].alternatives[0].transcript);
                     process.stdout.write(
                         data.results[0] && data.results[0].alternatives[0]
                             ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
@@ -87,7 +61,7 @@ export class CloudSpeechDetector {
                         .then(()=>{
                             let now : any= new Date();
                             if(now - lastUpdatedTime >= 10000){
-                                console.log('we are done');
+                                console.log('Stopping stream');
                                 record.stop();
                             }
                         });
