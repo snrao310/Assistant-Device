@@ -1,4 +1,5 @@
-import {CloudSpeechDetector} from "../SpeechDetection/CloudSpeechDetector";
+import {CloudSpeechDetector} from "../SpeechRecognition/CloudSpeechDetector";
+import {Logger} from "../Utils/Logger";
 
 const record = require('node-record-lpcm16');
 const Detector = require('snowboy').Detector;
@@ -14,43 +15,49 @@ const MODELPATH : string = 'snowboyResources/models/jarvis.umdl';
 export class WakeWordService {
 
     public static start(){
-        models.add(
-            {
-                file: MODELPATH,
-                sensitivity: SENSITIVITY,
-                hotwords : HOTWORD
+        try{
+            models.add(
+                {
+                    file: MODELPATH,
+                    sensitivity: SENSITIVITY,
+                    hotwords : HOTWORD
+                });
+
+            const detector = new Detector({
+                resource: "snowboyResources/common.res",
+                models: models,
+                audioGain: 4.0,
+                applyFrontend: true
             });
 
-        const detector = new Detector({
-            resource: "snowboyResources/common.res",
-            models: models,
-            audioGain: 4.0,
-            applyFrontend: true
-        });
+            this.initializeEvents(detector);
 
-        this.initializeEvents(detector);
+            const mic = record.start({
+                threshold: 0,
+                verbose: false
+            });
 
-        const mic = record.start({
-            threshold: 0,
-            verbose: false
-        });
-
-        mic.pipe(detector);
+            mic.pipe(detector);
+        }
+        catch(err){
+            Logger.error('Error while starting Wake Word Service');
+            throw err;
+        }
     }
 
     private static initializeEvents(detector){
         detector.on('silence', function () {
-            // console.log('silence');
+            // Logger.info('silence');
         });
 
         detector.on('sound', function (buffer) {
             // <buffer> contains the last chunk of the audio that triggers the "sound"
             // event. It could be written to a wav stream.
-            // console.log('sound');
+            // Logger.info('sound');
         });
 
         detector.on('error', function () {
-            console.log('error');
+            Logger.error('error in detector');
         });
 
         detector.on('hotword', function (index, hotword, buffer) {
@@ -58,10 +65,15 @@ export class WakeWordService {
             // event. It could be written to a wav stream. You will have to use it
             // together with the <buffer> in the "sound" event if you want to get audio
             // data after the hotword.
-            // console.log(buffer);
-            console.log('Hotword detected', index, hotword);
+            // Logger.info(buffer);
+            Logger.info('Hotword detected '+ index + ', hotword');
             record.stop();
-            CloudSpeechDetector.start();
+            try{
+                CloudSpeechDetector.start();
+            }
+            catch(err){
+                throw err;
+            }
         });
     }
 }

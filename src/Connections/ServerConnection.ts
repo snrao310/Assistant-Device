@@ -1,4 +1,5 @@
 import {isNullOrUndefined} from "util";
+import {Logger} from "../Utils/Logger";
 let serverUrl: string = require("../../appConfig.json").serverUrl;
 
 export class ServerConnection{
@@ -6,17 +7,26 @@ export class ServerConnection{
     public static socket: any = ServerConnection.createSocket();
 
     private static createSocket() {
-        const io = require('socket.io-client');
-        let socket = io.connect(serverUrl);
-        socket.on('pop', function (data) {
-            console.log(data);
-        });
+        try{
+            const io = require('socket.io-client');
+            let socket = io.connect(serverUrl);
+            socket.on('serverAskingDisconnect', function (data) {
+                Logger.info('Socket event \'serverAskingDisconnect\' triggered');
+                Logger.debug(data);
+                socket.disconnect();
+            });
 
-        socket.on('received', function (data) {
-            console.log("AWESOME");
-            socket.disconnect();
-        });
-        return socket;
+            socket.on('serverMessage', function (data) {
+                Logger.info("Socket event \'serverMessage\' triggered");
+                Logger.debug(data);
+            });
+            return socket;
+        }
+        catch (err){
+            Logger.error('Error while initializing socket');
+            throw err;
+        }
+
     }
 
     public static sendMessage(data: any){
@@ -33,6 +43,5 @@ export class ServerConnection{
             };
             this.socket.emit('userMessage', options);
         }
-
     }
 }

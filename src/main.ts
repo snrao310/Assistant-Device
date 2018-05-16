@@ -1,6 +1,12 @@
 import {WakeWordService} from "./WakeWordDetection/WakeWordService";
 import {ServerConnection} from "./Connections/ServerConnection";
+import {Logger} from "./Utils/Logger";
 
-console.log('Device Started');
+Logger.info('Device Started');
 
-WakeWordService.start();
+try{
+    WakeWordService.start();
+}
+catch (err){
+    Logger.error(err);
+}

@@ -1,4 +1,5 @@
 import {ServerConnection} from "../Connections/ServerConnection";
+import {Logger} from "../Utils/Logger";
 
 const record = require('node-record-lpcm16');
 // Imports the Google Cloud client library
@@ -14,28 +15,34 @@ let lastUpdatedTime: any;
 export class CloudSpeechDetector {
 
     public static stop(){
-        console.log("stopping recording");
+        Logger.info("stopping recording");
         record.stop();
     }
 
     public static start() {
-        const request = {
-            config: {
-                encoding: encoding,
-                sampleRateHertz: sampleRateHertz,
-                languageCode: languageCode,
-                single_utterance: true
-            },
-            interimResults: false, // If you want interim results, set this to true
-        };
+        try{
+            const request = {
+                config: {
+                    encoding: encoding,
+                    sampleRateHertz: sampleRateHertz,
+                    languageCode: languageCode,
+                    single_utterance: true
+                },
+                interimResults: false, // If you want interim results, set this to true
+            };
 
-        const recognizeStream = this.createRecognizeStream(request);
-        // Start recording and send the microphone input to the Speech API
-        this.startRecording(recognizeStream);
-        console.log("Started Cloud Speech Detection");
+            const recognizeStream = this.createRecognizeStream(request);
+            // Start recording and send the microphone input to the Speech API
+            this.startRecording(recognizeStream);
+            Logger.info("Started Cloud Speech Detection");
+        }
+        catch (err){
+            Logger.error('Error while starting Cloud Speech Detector');
+            throw err;
+        }
     }
 
-    public static async sleep(ms) {
+    public static async wait(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
@@ -44,7 +51,7 @@ export class CloudSpeechDetector {
         const recognizeStream = client
             .streamingRecognize(request)
             .on('error', function () {
-                console.log('Restarting');
+                Logger.info('Restarting');
                 CloudSpeechDetector.start();
             })
             .on('data', data => {
@@ -57,11 +64,11 @@ export class CloudSpeechDetector {
                     record.stop();
                     CloudSpeechDetector.start();
                     lastUpdatedTime = new Date();
-                    CloudSpeechDetector.sleep(10000)
+                    CloudSpeechDetector.wait(10000)
                         .then(()=>{
                             let now : any= new Date();
                             if(now - lastUpdatedTime >= 10000){
-                                console.log('Stopping stream');
+                                Logger.info('Stopping stream');
                                 record.stop();
                             }
                         });
