@@ -12,12 +12,14 @@ export class ServerConnection{
             let socket = io.connect(serverUrl);
             socket.on('serverAskingDisconnect', function (data) {
                 Logger.info('Socket event \'serverAskingDisconnect\' triggered');
+                data = ServerConnection.getString(data);
                 Logger.debug(data);
                 socket.disconnect();
             });
 
             socket.on('serverMessage', function (data) {
                 Logger.info("Socket event \'serverMessage\' triggered");
+                data = ServerConnection.getString(data);
                 Logger.debug(data);
             });
             return socket;
@@ -43,5 +45,12 @@ export class ServerConnection{
             };
             this.socket.emit('userMessage', options);
         }
+    }
+
+    public static getString(data: any){
+        if(typeof data == "object"){
+            return JSON.stringify(data);
+        }
+        return data;
     }
 }

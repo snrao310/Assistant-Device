@@ -1,4 +1,4 @@
-import {CloudSpeechDetector} from "../SpeechRecognition/CloudSpeechDetector";
+import {CloudSpeechRecognizer} from "../SpeechRecognition/CloudSpeechRecognizer";
 import {Logger} from "../Utils/Logger";
 
 const record = require('node-record-lpcm16');
@@ -69,7 +69,7 @@ export class WakeWordService {
             Logger.info('Hotword detected '+ index + ', hotword');
             record.stop();
             try{
-                CloudSpeechDetector.start();
+                CloudSpeechRecognizer.start();
             }
             catch(err){
                 throw err;

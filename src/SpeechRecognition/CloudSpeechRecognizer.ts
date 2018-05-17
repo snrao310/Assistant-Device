@@ -12,7 +12,7 @@ const sampleRateHertz = 16000;
 const languageCode = 'en-US'; //'BCP-47 language code, e.g. en-US';
 let lastUpdatedTime: any;
 
-export class CloudSpeechDetector {
+export class CloudSpeechRecognizer {
 
     public static stop(){
         Logger.info("stopping recording");
@@ -52,7 +52,7 @@ export class CloudSpeechDetector {
             .streamingRecognize(request)
             .on('error', function () {
                 Logger.info('Restarting');
-                CloudSpeechDetector.start();
+                CloudSpeechRecognizer.start();
             })
             .on('data', data => {
                     ServerConnection.sendMessage(data.results[0] && data.results[0].alternatives[0].transcript);
@@ -62,9 +62,9 @@ export class CloudSpeechDetector {
                             : `\n\nReached transcription time limit\n`
                     );
                     record.stop();
-                    CloudSpeechDetector.start();
+                    CloudSpeechRecognizer.start();
                     lastUpdatedTime = new Date();
-                    CloudSpeechDetector.wait(10000)
+                    CloudSpeechRecognizer.wait(10000)
                         .then(()=>{
                             let now : any= new Date();
                             if(now - lastUpdatedTime >= 10000){
