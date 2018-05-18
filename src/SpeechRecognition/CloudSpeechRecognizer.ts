@@ -1,6 +1,7 @@
 import {ServerConnection} from "../Connections/ServerConnection";
 import {Logger} from "../Utils/Logger";
 import {AudioPlayer} from "../AudioPlayback/AudioPlayer";
+import {WakeWordDetector} from "../WakeWordDetection/WakeWordDetector";
 
 const record = require('node-record-lpcm16');
 // Imports the Google Cloud client library
@@ -75,6 +76,7 @@ export class CloudSpeechRecognizer {
                             if(now - lastUpdatedTime >= 10000){
                                 Logger.info('Stopping stream');
                                 record.stop();
+                                WakeWordDetector.start();
                             }
                         });
                 }

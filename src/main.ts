@@ -1,11 +1,11 @@
-import {WakeWordService} from "./WakeWordDetection/WakeWordService";
+import {WakeWordDetector} from "./WakeWordDetection/WakeWordDetector";
 import {ServerConnection} from "./Connections/ServerConnection";
 import {Logger} from "./Utils/Logger";
 
 Logger.info('Device Started');
 
 try{
-    WakeWordService.start();
+    WakeWordDetector.start();
 }
 catch (err){
     Logger.error(err);

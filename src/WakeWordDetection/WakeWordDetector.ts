@@ -14,10 +14,11 @@ const MODELPATH : string = 'snowboyResources/models/jarvis.umdl';
 const CUE_MESSAGE_PATH : string = 'audioMessages/atYourService.mp3';
 
 
-export class WakeWordService {
+export class WakeWordDetector {
 
     public static start(){
         try{
+            Logger.info('Started Wake word detection')
             models.add(
                 {
                     file: MODELPATH,
