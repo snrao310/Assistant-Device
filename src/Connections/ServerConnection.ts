@@ -1,5 +1,6 @@
 import {isNullOrUndefined} from "util";
 import {Logger} from "../Utils/Logger";
+import {AudioPlayer} from "../AudioPlayback/AudioPlayer";
 let serverUrl: string = require("../../appConfig.json").serverUrl;
 
 export class ServerConnection{
@@ -12,15 +13,16 @@ export class ServerConnection{
             let socket = io.connect(serverUrl);
             socket.on('serverAskingDisconnect', function (data) {
                 Logger.info('Socket event \'serverAskingDisconnect\' triggered');
-                data = ServerConnection.getString(data);
-                Logger.debug(data);
+                let dataString = ServerConnection.getString(data);
+                Logger.debug(dataString);
                 socket.disconnect();
             });
 
             socket.on('serverMessage', function (data) {
                 Logger.info("Socket event \'serverMessage\' triggered");
-                data = ServerConnection.getString(data);
-                Logger.debug(data);
+                let dataString = ServerConnection.getString(data);
+                Logger.debug(dataString);
+                AudioPlayer.playAudio(data.message,false);
             });
             return socket;
         }
@@ -47,7 +49,7 @@ export class ServerConnection{
         }
     }
 
-    public static getString(data: any){
+    private static getString(data: any){
         if(typeof data == "object"){
             return JSON.stringify(data);
         }
