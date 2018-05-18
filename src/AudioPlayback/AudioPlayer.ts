@@ -1,13 +1,20 @@
 import {Logger} from "../Utils/Logger";
 import * as fs from "fs";
-import {CloudSpeechRecognizer} from "../SpeechRecognition/CloudSpeechRecognizer";
 
 const player = require('play-sound')({});
-const fileName = 'output.mp3';
+const defaultFileName = 'output.mp3';
 
 export class AudioPlayer{
 
+    private static playing: boolean = false;
+
+    public static isPlaying(){
+        return this.playing;
+    }
+
     public static playAudio(speech: string, isFileName: boolean){
+        this.playing = true;
+        let fileName = (isFileName)?speech:defaultFileName;
         if(!isFileName){
             // Write the binary audio content to a local file
             fs.writeFile(fileName, speech, 'binary', err => {
@@ -16,11 +23,17 @@ export class AudioPlayer{
                     throw err;
                 }
                 Logger.info('Audio content written to file: output.mp3');
+                this.playAudioFile(fileName);
             });
         }
-        CloudSpeechRecognizer.stop();
+        else{
+            this.playAudioFile(fileName);
+        }
+    }
+
+    private static playAudioFile(fileName: string){
         player.play(fileName, function(err){
-            CloudSpeechRecognizer.start();
+            AudioPlayer.playing = false;
             if (err){
                 Logger.error('Error while playing audio');
                 throw err;

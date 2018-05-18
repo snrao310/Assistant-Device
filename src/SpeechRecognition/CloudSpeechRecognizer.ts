@@ -1,5 +1,6 @@
 import {ServerConnection} from "../Connections/ServerConnection";
 import {Logger} from "../Utils/Logger";
+import {AudioPlayer} from "../AudioPlayback/AudioPlayer";
 
 const record = require('node-record-lpcm16');
 // Imports the Google Cloud client library
@@ -19,7 +20,15 @@ export class CloudSpeechRecognizer {
         record.stop();
     }
 
-    public static start() {
+    public static async wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    public static async start() {
+        while(AudioPlayer.isPlaying()){
+            await this.wait(250);
+        }
+
         try{
             const request = {
                 config: {
@@ -40,10 +49,6 @@ export class CloudSpeechRecognizer {
             Logger.error('Error while starting Cloud Speech Detector');
             throw err;
         }
-    }
-
-    public static async wait(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     //sends received text from google to server
