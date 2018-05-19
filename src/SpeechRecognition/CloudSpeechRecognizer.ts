@@ -45,6 +45,7 @@ export class CloudSpeechRecognizer {
             // Start recording and send the microphone input to the Speech API
             this.startRecording(recognizeStream);
             Logger.info("Started Cloud Speech Detection");
+            await this.stopIfSilence();
         }
         catch (err){
             Logger.error('Error while starting Cloud Speech Detector');
@@ -60,7 +61,7 @@ export class CloudSpeechRecognizer {
                 Logger.info('Restarting');
                 CloudSpeechRecognizer.start();
             })
-            .on('data', data => {
+            .on('data', async function(data){
                     ServerConnection.sendMessage(data.results[0] && data.results[0].alternatives[0].transcript);
                     process.stdout.write(
                         data.results[0] && data.results[0].alternatives[0]
@@ -69,19 +70,21 @@ export class CloudSpeechRecognizer {
                     );
                     record.stop();
                     CloudSpeechRecognizer.start();
-                    lastUpdatedTime = new Date();
-                    CloudSpeechRecognizer.wait(10000)
-                        .then(()=>{
-                            let now : any= new Date();
-                            if(now - lastUpdatedTime >= 10000){
-                                Logger.info('Stopping stream');
-                                record.stop();
-                                WakeWordDetector.start();
-                            }
-                        });
+                    await CloudSpeechRecognizer.stopIfSilence();
                 }
             );
         return recognizeStream;
+    }
+
+    private static async stopIfSilence(){
+        lastUpdatedTime = new Date();
+        await CloudSpeechRecognizer.wait(10000);
+        let now : any= new Date();
+        if(now - lastUpdatedTime >= 10000){
+            Logger.info('Stopping stream');
+            record.stop();
+            WakeWordDetector.start();
+        }
     }
 
     private static startRecording(recognizeStream) {
