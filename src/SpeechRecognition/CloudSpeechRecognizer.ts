@@ -70,7 +70,6 @@ export class CloudSpeechRecognizer {
                     );
                     record.stop();
                     CloudSpeechRecognizer.start();
-                    await CloudSpeechRecognizer.stopIfSilence();
                 }
             );
         return recognizeStream;
