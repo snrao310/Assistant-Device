@@ -1,7 +1,7 @@
 import {isNullOrUndefined} from "util";
 import {Logger} from "../Utils/Logger";
 import {AudioPlayer} from "../AudioPlayback/AudioPlayer";
-import {SpeechRecognizer} from "../SpeechRecognition/SpeechRecognizer";
+import {CloudSpeechRecognizer} from "../SpeechRecognition/CloudSpeechRecognizer";
 let serverUrl: string = require("../../appConfig.json").serverUrl;
 
 export class ServerConnection{
@@ -22,9 +22,9 @@ export class ServerConnection{
             socket.on('serverMessage', function (data) {
                 Logger.info("Socket event \'serverMessage\' triggered");
                 if(data.hasOwnProperty('message')){
-                    SpeechRecognizer.stop();
+                    CloudSpeechRecognizer.stop();
                     AudioPlayer.playAudio(data.message,false);
-                    SpeechRecognizer.start();
+                    CloudSpeechRecognizer.start();
                 }
             });
             return socket;

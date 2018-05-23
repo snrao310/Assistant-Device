@@ -17,11 +17,11 @@ let lastUpdatedTime: any;
 export class CloudSpeechRecognizer {
 
     public static stop(){
-        Logger.info("Stopping Cloud Speech Detection");
+        Logger.info("stopping recording");
         record.stop();
     }
 
-    private static async wait(ms) {
+    public static async wait(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
@@ -70,6 +70,7 @@ export class CloudSpeechRecognizer {
                     );
                     record.stop();
                     CloudSpeechRecognizer.start();
+                    await CloudSpeechRecognizer.stopIfSilence();
                 }
             );
         return recognizeStream;
@@ -96,7 +97,7 @@ export class CloudSpeechRecognizer {
                 recordProgram: 'rec', // Try also "arecord" or "sox"
                 silence: '10.0',
             })
-            .on('error', Logger.error)
+            .on('error', console.error)
             .pipe(recognizeStream);
     }
 
