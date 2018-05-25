@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ASSISTANT</title>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="Mocker.js"></script>
+</head>
+<body>
+<div id="wakeWordDiv">
+    <p>Enter Wake Word</p>
+    <textarea rows="4" cols="50" id="wakeWordText" onkeypress="processWakeWordKeyPress(event, this)"></textarea>
+    <button type="button"
+            onclick="startSpeechDetection()">
+        Send
+    </button>
+</div>
+
+<div id="speechDiv" style="visibility:hidden;">
+    <p>Enter Message to Send</p>
+    <textarea rows="4" cols="50" id="speechText" onkeypress="processSpeechKeyPress(event, this)"></textarea>
+
+    <button type="button"
+            onclick="sendTextToServer()">
+        Send
+    </button>
+</div>
+
+<div id="responseDiv">
+    <p id="AssistantResponse">Response:</p>
+</div>
+</body>
+</html>

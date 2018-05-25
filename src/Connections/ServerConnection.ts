@@ -27,6 +27,10 @@ export class ServerConnection{
                     CloudSpeechRecognizer.start();
                 }
             });
+
+            socket.on('connect', function () {});
+            socket.on('disconnect', function () {});
+
             return socket;
         }
         catch (err){
