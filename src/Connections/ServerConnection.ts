@@ -21,9 +21,9 @@ export class ServerConnection{
 
             socket.on('serverMessage', function (data) {
                 Logger.info("Socket event \'serverMessage\' triggered");
-                if(data.hasOwnProperty('message')){
+                if(data.hasOwnProperty('speechResponse')){
                     CloudSpeechRecognizer.stop();
-                    AudioPlayer.playAudio(data.message,false);
+                    AudioPlayer.playAudio(data.speechResponse,false);
                     CloudSpeechRecognizer.start();
                 }
             });
@@ -43,12 +43,13 @@ export class ServerConnection{
     public static sendMessage(data: any){
         if (!isNullOrUndefined(data)) {
             //any user specific data that will help identify user will go into the options.
-            //none of that for now since only one user.
+            //none of that for now since only one user. For now, just sending Mr.Rao.
             const options = {
                 method: "POST",
                 url: serverUrl,
                 body: {
                     message: data,
+                    userName: 'Mr.Rao'
                 },
                 json: true
             };

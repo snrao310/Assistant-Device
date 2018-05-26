@@ -15,10 +15,10 @@ function createSocket() {
     });
 
     socket.on('serverMessage', function (data) {
-        console.log("Socket event \'serverMessage\' triggered");
-        if (data.hasOwnProperty('message')) {
-            console.log(data.text);
-            document.getElementById('AssistantResponse').innerText = "Response: " + data.text;
+        console.log("Socket event \'serverMessage\' triggered"+data);
+        if (data.hasOwnProperty('textResponse')) {
+            console.log(data.textResponse);
+            document.getElementById('AssistantResponse').innerText = "Response: " + data.textResponse;
             startSpeechDetection();
         }
     });
@@ -30,7 +30,8 @@ function sendMessage(data) {
             method: "POST",
             url: serverUrl,
             body: {
-                message: data
+                message: data,
+                userName: "Mr.Rao.Mocker"
             },
             json: true
         };
