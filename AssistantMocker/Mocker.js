@@ -57,6 +57,7 @@ function sendTextToServer() {
     if (document.getElementById('speechText').value.length != 0) {
         sendMessage(document.getElementById('speechText').value);
         document.getElementById('speechText').value = '';
+        document.getElementById('AssistantResponse').innerText = 'Response: ';
     }
 }
 
