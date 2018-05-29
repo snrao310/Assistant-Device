@@ -6,3 +6,6 @@ dist/
 
 # WebStorm IDE
 .idea/
+
+# Output audio file
+output.mp3
