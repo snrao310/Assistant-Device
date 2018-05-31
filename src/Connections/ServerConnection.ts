@@ -21,6 +21,7 @@ export class ServerConnection{
 
             socket.on('serverMessage', function (data) {
                 Logger.info("Socket event \'serverMessage\' triggered");
+                Logger.debug('Server message is: '+ data.textResponse);
                 if(data.hasOwnProperty('speechResponse')){
                     CloudSpeechRecognizer.stop();
                     AudioPlayer.playAudio(data.speechResponse,false);
