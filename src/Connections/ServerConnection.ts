@@ -14,18 +14,23 @@ export class ServerConnection{
             let socket = io.connect(serverUrl);
             socket.on('serverAskingDisconnect', function (data) {
                 Logger.info('Socket event \'serverAskingDisconnect\' triggered');
-                let dataString = ServerConnection.getString(data);
+                let dataString = Logger.getString(data);
                 Logger.debug(dataString);
                 socket.disconnect();
             });
 
-            socket.on('serverMessage', function (data) {
+            socket.on('serverMessage', async function (data) {
                 Logger.info("Socket event \'serverMessage\' triggered");
-                Logger.debug('Server message is: '+ data.textResponse);
+                Logger.debug('Server message is: '+ Logger.getString(data.textResponse));
                 if(data.hasOwnProperty('speechResponse')){
                     CloudSpeechRecognizer.stop();
                     AudioPlayer.playAudio(data.speechResponse,false);
                     CloudSpeechRecognizer.start();
+                }
+
+                if(data.hasOwnProperty('clientJobs')){
+                    let action = require('../ClientJobs/'+data.clientJobs.task)[data.clientJobs.task];
+                    await action.execute(data.clientJobs);
                 }
             });
 
@@ -56,12 +61,5 @@ export class ServerConnection{
             };
             this.socket.emit('userMessage', options);
         }
-    }
-
-    private static getString(data: any){
-        if(typeof data == "object"){
-            return JSON.stringify(data);
-        }
-        return data;
     }
 }

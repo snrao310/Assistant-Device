@@ -1,44 +1,43 @@
 var serverUrl = "http://localhost:3000";
 var socket;
 var lastUpdatedTime;
-window.onload = createSocket();
-
-function createSocket() {
-    socket = io(serverUrl);
-    socket.on('connect', function () {});
-    socket.on('disconnect', function () {});
-
-    socket.on('serverAskingDisconnect', function (data) {
-        console.log('Socket event \'serverAskingDisconnect\' triggered');
-        console.log(dataString);
-        socket.disconnect();
-    });
-
-    socket.on('serverMessage', function (data) {
-        console.log("Socket event \'serverMessage\' triggered"+data);
-        if (data.hasOwnProperty('textResponse')) {
-            console.log(data.textResponse);
-            document.getElementById('AssistantResponse').innerText = "Response: " + data.textResponse;
-            startSpeechDetection();
-        }
-    });
-}
-
-function sendMessage(data) {
-    if (data != null && data != undefined && data.length != 0) {
-        const options = {
-            method: "POST",
-            url: serverUrl,
-            body: {
-                message: data,
-                userName: "Mr.Rao.Mocker"
-            },
-            json: true
-        };
-        console.log('sending message to server');
-        socket.emit('userMessage', options);
-    }
-}
+// window.onload = createSocket();
+// function createSocket() {
+//     socket = io(serverUrl);
+//     socket.on('connect', function () {});
+//     socket.on('disconnect', function () {});
+//
+//     socket.on('serverAskingDisconnect', function (data) {
+//         console.log('Socket event \'serverAskingDisconnect\' triggered');
+//         console.log(dataString);
+//         socket.disconnect();
+//     });
+//
+//     socket.on('serverMessage', function (data) {
+//         console.log("Socket event \'serverMessage\' triggered"+data);
+//         if (data.hasOwnProperty('textResponse')) {
+//             console.log(data.textResponse);
+//             document.getElementById('AssistantResponse').innerText = "Response: " + data.textResponse;
+//             startSpeechDetection();
+//         }
+//     });
+// }
+//
+// function sendMessage(data) {
+//     if (data != null && data != undefined && data.length != 0) {
+//         const options = {
+//             method: "POST",
+//             url: serverUrl,
+//             body: {
+//                 message: data,
+//                 userName: "Mr.Rao.Mocker"
+//             },
+//             json: true
+//         };
+//         console.log('sending message to server');
+//         socket.emit('userMessage', options);
+//     }
+// }
 
 function startSpeechDetection() {
     if (document.getElementById('wakeWordText').value.toLowerCase() == "jarvis") {
